@@ -10,7 +10,9 @@
 
 class IO
   def suppress
-    old = IO.pipe.last.reopen(self)
+    _, old = IO.pipe
+    old.reopen(self)
+    _.close
     self.reopen(IO.pipe.last)
 
     yield
@@ -20,7 +22,9 @@ class IO
   end
 
   def catch
-    old = IO.pipe.last.reopen(self)
+    _, old = IO.pipe
+    old.reopen(self)
+    _.close
     pip = IO.pipe
 
     begin
